@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Love!</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #fbd3e9, #ff8eec);
+            background-size: cover;
+            background-position: center;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            overflow: hidden;
+            text-align: center;
+            position: relative;
+            animation: backgroundAnim 5s infinite alternate;
+        }
+
+        /* Floating hearts in the background */
+        @keyframes heartFloating {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(0.5);
+            }
+            50% {
+                opacity: 0.6;
+                transform: translateY(-100px) scale(1);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(0.5);
+            }
+        }
+
+        .heart {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: url('heart.png') no-repeat center center;
+            background-size: contain;
+            animation: heartFloating 6s infinite ease-in-out;
+        }
+
+        /* Envelope Styles */
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background-color: #ff8c99;
+            position: relative;
+            cursor: pointer;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: transform 1s ease;
+            margin-bottom: 20px;
+            z-index: 1;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        /* Envelope flap (white part) */
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: #fff;
+            border-radius: 10px 10px 0 0;
+            transition: transform 1s ease;
+        }
+
+        /* Heart effect on the envelope */
+        .envelope:after {
+            content: '❤️';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            animation: heartAnim 1.5s infinite ease-in-out;
+        }
+
+        /* Heart animation */
+        @keyframes heartAnim {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Hidden message styles */
+        .message {
+            display: none;
+            color: #ff69b4;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.7);
+            animation: fadeIn 1s ease-in-out forwards;
+            z-index: 0;
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 30px;
+        }
+
+        /* Animation for the hidden message */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Audio */
+        audio {
+            display: none;
+        }
+
+        /* Envelope open animation */
+        .open {
+            transform: rotateX(180deg);
+        }
+
+        .open::before {
+            transform: rotateX(180deg);
+        }
+
+        /* Teddy Bear Animation */
+        .teddy-bear {
+            position: absolute;
+            bottom: 10%;
+            right: 10%;
+            width: 150px;
+            height: auto;
+            animation: teddyMove 6s infinite alternate;
+        }
+
+        @keyframes teddyMove {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Teddy Bear -->
+    <img src="teddy-bear.png" class="teddy-bear" alt="Teddy Bear" /> <!-- Replace with your custom teddy bear image -->
+
+    <!-- Envelope 1 -->
+    <div class="envelope" onclick="openEnvelope(1)"></div>
+
+    <!-- Envelope 2 -->
+    <div class="envelope" onclick="openEnvelope(2)" style="display:none;"></div>
+
+    <!-- Envelope 3 -->
+    <div class="envelope" onclick="openEnvelope(3)" style="display:none;"></div>
+
+    <!-- Envelope 4 -->
+    <div class="envelope" onclick="openEnvelope(4)" style="display:none;"></div>
+
+    <!-- Envelope 5 -->
+    <div class="envelope" onclick="openEnvelope(5)" style="display:none;"></div>
+
+    <!-- Hidden message 1 -->
+    <div class="message" id="message1">
+        Spent hours learning JavaScript just to make this website for you.
+    </div>
+
+    <!-- Hidden message 2 -->
+    <div class="message" id="message2">
+        Because my gift options were very limited, since we have our limits, yeah well...
+    </div>
+
+    <!-- Hidden message 3 -->
+    <div class="message" id="message3">
+        It was a pain in the ass, but I hope you see how much I care and love you ❤️
+    </div>
+
+    <!-- Hidden message 4 -->
+    <div class="message" id="message4">
+        This took more time than you could ever imagine... but it's all for you!
+    </div>
+
+    <!-- Hidden message 5 -->
+    <div class="message" id="message5">
+        Happy Birthday, Wifey! You're my everything! 🎉💖
+    </div>
+
+    <!-- Audio for piano music -->
+    <audio id="piano" autoplay loop>
+        <source src="piano.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Fart sound -->
+    <audio id="fart" src="fart.mp3"></audio> <!-- Make sure to replace with your fart sound mp3 -->
+
+    <script>
+        let currentEnvelope = 0;
+
+        function openEnvelope(envelopeNumber) {
+            currentEnvelope++;
+
+            // Open the current envelope
+            const envelope = document.getElementsByClassName("envelope")[envelopeNumber - 1];
+            envelope.classList.add("open");
+
+            // Show the corresponding message after the envelope opens
+            setTimeout(function() {
+                document.getElementById("message" + envelopeNumber).style.display = "block";
+            }, 1000); // Show the message 1 second after the envelope opens
+
+            // Hide the current envelope and show the next one
+            setTimeout(function() {
+                envelope.style.display = "none";
+                if (currentEnvelope < 5) {
+                    document.getElementsByClassName("envelope")[currentEnvelope].style.display = "block";
+                } else {
+                    // Play music and reveal final message after all envelopes are opened
+                    document.getElementById("piano").play();
+                    document.getElementById("message5").style.display = "block";
+
+                    // Play fart sound and fade out
+                    const fart = document.getElementById("fart");
+                    fart.play();
+                    setTimeout(() => {
+                        document.body.style.transition = "all 2s";
+                        document.body.style.opacity = "0";
+                    }, 1000); // Play fart sound and fade out after the last envelope
+                }
+            }, 2000); // Hide the envelope after 2 seconds (animation duration)
+        }
+
+        // Floating hearts
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = `${Math.random() * window.innerWidth}px`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }, 500);
+    </script>
+
+</body>
+</html>
